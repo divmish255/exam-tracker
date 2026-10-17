@@ -1,0 +1,29 @@
+{
+  "name": "boardrank-ai-exam-portal",
+  "version": "1.1.0",
+  "description": "Comprehensive 10th & 12th Board Exam Prep, Revision Quiz, AIR Predictor, Subjective Evaluator, and Study & Sleep Planner",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx vercel dev",
+    "static": "npx serve ."
+  },
+  "dependencies": {
+    "@vercel/blob": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "cbse",
+    "icse",
+    "state-boards",
+    "class-10",
+    "class-12",
+    "board-exam",
+    "revision-quiz",
+    "all-india-rank",
+    "study-planner"
+  ],
+  "author": "BoardRank AI Team",
+  "license": "MIT"
+}

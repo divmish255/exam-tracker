@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BoardRank AI - 10th & 12th Board Exam Prep & Revision Portal</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top App Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="logo-area">
+        <div class="logo-badge">🎓</div>
+        <div class="logo-text">
+          <h1>BoardRank AI</h1>
+          <span>10th & 12th All-India Exam & Revision Hub</span>
+        </div>
+      </div>
+
+      <!-- Quick Selectors: Board, Class, Stream -->
+      <div class="user-controls">
+        <select id="boardSelect" class="control-select" title="Choose Board">
+          <!-- Populated from data.js -->
+        </select>
+
+        <select id="classSelect" class="control-select" title="Choose Class">
+          <option value="class10">Class 10th</option>
+          <option value="class12" selected>Class 12th</option>
+        </select>
+
+        <select id="streamSelect" class="control-select" title="Choose Stream">
+          <!-- Populated dynamically -->
+        </select>
+
+        <button id="openPanicBtn" class="btn btn-panic">
+          🚨 Panic SOS
+        </button>
+
+        <button id="authBtn" class="btn btn-primary">
+          <span id="userEmailBadge">👤 Login with Email</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Bar -->
+  <nav class="tab-nav">
+    <div class="nav-container">
+      <button class="tab-btn active" data-tab="dashboard">📊 Weekly Dashboard</button>
+      <button class="tab-btn" data-tab="report">📄 My Report Card</button>
+      <button class="tab-btn" data-tab="planner">⏱️ Study & Sleep Calculator</button>
+      <button class="tab-btn" data-tab="syllabus">📚 Syllabus Left Tracker</button>
+      <button class="tab-btn" data-tab="mocktest">📝 Quiz & Mock Test (AIR)</button>
+      <button class="tab-btn" data-tab="evaluator">✍️ Written Answer Evaluator</button>
+      <button class="tab-btn" data-tab="pyqs">📁 Previous Year Papers</button>
+      <button class="tab-btn" data-tab="videos">📺 YouTube Revision</button>
+      <button class="tab-btn" data-tab="alarm">⏰ Study Alarm & Countdown</button>
+      <button class="tab-btn" data-tab="motivation">🧘 Panic & Motivation Gym</button>
+    </div>
+  </nav>
+
+  <!-- Main Content Areas -->
+  <main class="main-content">
+
+    <!-- 1. DASHBOARD & WEEKLY PERFORMANCE TAB -->
+    <section id="tab-dashboard" class="tab-pane active">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">📈 Weekly Performance & Exam Preparedness</h2>
+            <p class="card-subtitle">Real-time overview of your mock test scores, syllabus coverage, and study adherence.</p>
+          </div>
+          <button id="syncReportBtn" class="btn btn-outline">🔄 Refresh Analytics</button>
+        </div>
+
+        <div class="grid-4">
+          <div class="stat-box cyan">
+            <div class="stat-label">Syllabus Completed</div>
+            <div class="stat-value" id="dashSyllabusPct">58%</div>
+            <div class="progress-container">
+              <div id="dashSyllabusBar" class="progress-bar" style="width: 58%;"></div>
+            </div>
+            <div class="stat-subtext" id="dashSyllabusRemaining">42% syllabus remaining</div>
+          </div>
+
+          <div class="stat-box green">
+            <div class="stat-label">Latest Mock Test Accuracy</div>
+            <div class="stat-value" id="dashMockScore">84%</div>
+            <div class="stat-subtext">Avg of last 3 board mock papers</div>
+          </div>
+
+          <div class="stat-box amber">
+            <div class="stat-label">Est. All India Rank (AIR)</div>
+            <div class="stat-value" id="dashEstimatedAir"># 4,210</div>
+            <div class="stat-subtext">Top 96.8 percentile nationwide</div>
+          </div>
+
+          <div class="stat-box">
+            <div class="stat-label">Daily Study Target</div>
+            <div class="stat-value" id="dashStudyHrs">6.5 hrs</div>
+            <div class="stat-subtext">Recommended + 7.5 hrs sleep</div>
+          </div>
+        </div>
+
+        <!-- Weekly Performance Log -->
+        <div style="margin-top: 1.5rem;">
+          <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: #fff;">📅 7-Day Performance Tracking</h3>
+          <div style="overflow-x: auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Day / Week</th>
+                  <th>Hours Studied</th>
+                  <th>Sleep Logged</th>
+                  <th>Mock Test Taken</th>
+                  <th>Accuracy</th>
+                  <th>Syllabus Topics Cleared</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="weeklyTableBody">
+                <!-- Injected via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. STUDY, SLEEP & REVISION PLANNER TAB -->
+    <section id="tab-planner" class="tab-pane">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">⏱️ Science-Backed Study, Sleep & Revision Calculator</h2>
+            <p class="card-subtitle">Customized plan according to your current academic performance bracket (<60%, 60-80%, >80%).</p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <!-- Input Form for Academic Performance -->
+          <div>
+            <h3 style="margin-bottom: 1rem; color: #38bdf8;">🎯 Assess Your Current Level</h3>
+            <div class="form-group">
+              <label class="form-label">Current Academic Standing / Pre-Board Score (%)</label>
+              <select id="plannerScoreBracket" class="form-input">
+                <option value="tier1">Needs Fundamental Boost (< 60% in pre-boards / feeling unprepared)</option>
+                <option value="tier2" selected>Moderate / Average Achiever (60% - 80% with syllabus gaps)</option>
+                <option value="tier3">High Achiever / Rank Aspirant (80%+ aiming for 95%+ & Top AIR)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Remaining Days until Board Exams</label>
+              <input type="number" id="plannerDaysLeft" class="form-input" value="95" min="1" max="365">
+            </div>
+
+            <button id="calculatePlanBtn" class="btn btn-primary" style="width: 100%;">
+              ⚡ Generate Personalized Routine
+            </button>
+          </div>
+
+          <!-- Dynamic Output Card -->
+          <div id="plannerOutputCard" class="stat-box" style="background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(99, 102, 241, 0.3);">
+            <!-- Populated dynamically via JS -->
+          </div>
+        </div>
+
+        <!-- Evidence-Based Science of Sleep & Memory Table -->
+        <div style="margin-top: 2rem;">
+          <h3 style="font-size: 1.1rem; margin-bottom: 0.75rem; color: #fff;">🧠 The 3-Tier Sleep & Memory Consolidation Matrix</h3>
+          <div style="overflow-x: auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Performance Tier</th>
+                  <th>Daily Self-Study</th>
+                  <th>Mandatory Sleep</th>
+                  <th>Revision Breakdown</th>
+                  <th>Why this Sleep is Non-Negotiable</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Struggling (<60%)</strong></td>
+                  <td><span class="badge" style="background: rgba(239, 68, 68, 0.2); color: #f87171;">5.5 - 6.5 Hours</span></td>
+                  <td><span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399;">7.5 - 8 Hours</span></td>
+                  <td>2 hrs NCERT core concepts + 1 hr formula drill</td>
+                  <td>Sleep deprivation destroys neuroplasticity. Students catching up cannot retain new concepts without 7.5 hrs of REM sleep.</td>
+                </tr>
+                <tr>
+                  <td><strong>Consistent (60%-80%)</strong></td>
+                  <td><span class="badge" style="background: rgba(245, 158, 11, 0.2); color: #fbbf24;">6.5 - 7.5 Hours</span></td>
+                  <td><span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399;">7 Hours</span></td>
+                  <td>2.5 hrs solving PYQs + 1.5 hrs weak-spot revision</td>
+                  <td>Protects focus and working memory, preventing careless errors in derivations and calculations.</td>
+                </tr>
+                <tr>
+                  <td><strong>Toppers (85%+)</strong></td>
+                  <td><span class="badge" style="background: rgba(99, 102, 241, 0.2); color: #818cf8;">7.5 - 8.5 Hours</span></td>
+                  <td><span class="badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399;">7 - 7.5 Hours</span></td>
+                  <td>3 hrs full 3-hr mock papers + 1 hr error analysis</td>
+                  <td>Ensures peak cognitive speed, lateral thinking for unexpected case studies and tricky questions.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. SYLLABUS LEFT TRACKER TAB -->
+    <section id="tab-syllabus" class="tab-pane">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">📚 Board Syllabus Completion & Backlog Tracker</h2>
+            <p class="card-subtitle">Keep exact tabs on chapters completed, in-progress, and left unread with board mark weightage.</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <select id="syllabusSubjectFilter" class="control-select">
+              <!-- Dynamically populated based on class and stream -->
+            </select>
+          </div>
+        </div>
+
+        <div class="grid-3" style="margin-bottom: 1.5rem;">
+          <div class="stat-box green">
+            <div class="stat-label">Completed Chapters</div>
+            <div class="stat-value" id="syllCompletedCount">0</div>
+          </div>
+          <div class="stat-box amber">
+            <div class="stat-label">In-Progress Chapters</div>
+            <div class="stat-value" id="syllInProgressCount">0</div>
+          </div>
+          <div class="stat-box red">
+            <div class="stat-label">Syllabus Left / Backlogs</div>
+            <div class="stat-value" id="syllPendingCount">0</div>
+          </div>
+        </div>
+
+        <div id="syllabusListContainer" style="border-radius: var(--radius-md); overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.08);">
+          <!-- Checklist items loaded dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. MOCK TEST & REVISION QUIZ TAB (WITH AIR) -->
+    <section id="tab-mocktest" class="tab-pane">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">📝 Board Revision Quiz & Full Mock Test</h2>
+            <p class="card-subtitle">Features genuine Previous Years' Questions (PYQs) and high-probability predicted questions for upcoming exams.</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+            <select id="mockSubjectFilter" class="control-select">
+              <option value="all">All Stream Subjects</option>
+            </select>
+            <select id="mockTypeFilter" class="control-select">
+              <option value="all">All Question Types</option>
+              <option value="pyq">Past Year Questions (PYQs)</option>
+              <option value="expected">Predicted for Upcoming Board</option>
+            </select>
+            <button id="resetQuizBtn" class="btn btn-outline">🔄 Reset</button>
+          </div>
+        </div>
+
+        <div id="quizContainer">
+          <!-- Questions will be dynamically rendered here -->
+        </div>
+
+        <div style="margin-top: 1.5rem; text-align: center;">
+          <button id="submitQuizBtn" class="btn btn-primary" style="font-size: 1.1rem; padding: 0.85rem 2rem;">
+            🎯 Submit Test & Calculate All India Rank
+          </button>
+        </div>
+
+        <!-- Result / AIR Display Box (Hidden until submit) -->
+        <div id="quizResultArea" style="display: none; margin-top: 2rem;">
+          <div class="stat-box" style="border: 1px solid #6366f1; background: rgba(15, 23, 42, 0.95);">
+            <div class="air-badge">
+              <span class="badge badge-expected" style="font-size: 0.9rem; padding: 0.4rem 1rem;">NATIONWIDE SIMULATION RESULT</span>
+              <div class="air-number" id="resultAirRank">AIR #3,842</div>
+              <p style="color: #94a3b8; font-size: 1.1rem;" id="resultPercentile">Percentile: <strong>97.2%</strong> among 142,000 students</p>
+              <div style="margin: 1.5rem 0; font-size: 1.25rem; font-weight: 700; color: #38bdf8;" id="resultRawScore">
+                Score: 5 / 5 (100%)
+              </div>
+              <p id="resultFeedback" style="max-width: 600px; margin: 0 auto; color: #cbd5e1; line-height: 1.6;"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. WRITTEN / SUBJECTIVE ANSWER EVALUATOR TAB -->
+    <section id="tab-evaluator" class="tab-pane">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">✍️ Written / Subjective Answer Evaluator</h2>
+            <p class="card-subtitle">Type or write your long/short answer to real board questions. Our evaluation engine checks your keywords, structure, step-marking, and compares with official model answers.</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Select Subjective Question</label>
+          <select id="subjectiveQuestionSelect" class="form-input">
+            <!-- Populated from subjectiveQuestions -->
+          </select>
+        </div>
+
+        <div id="activeSubjectivePrompt" style="background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+            <span class="badge badge-stream" id="subqSubjectBadge">Physics (Class 12)</span>
+            <span class="badge badge-expected" id="subqMarksBadge">3 Marks</span>
+          </div>
+          <h3 id="subqText" style="font-size: 1.05rem; color: #fff; line-height: 1.5;">Question description here...</h3>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Write / Type Your Answer Below (Simulate Exam Paper Conditions):</label>
+          <textarea id="studentSubjectiveInput" class="subjective-input" placeholder="Start typing your structured answer here. Include definitions, key formulas, mechanisms, or relevant points..."></textarea>
+        </div>
+
+        <div style="display: flex; gap: 1rem; align-items: center;">
+          <button id="evaluateAnswerBtn" class="btn btn-primary" style="padding: 0.75rem 1.75rem;">
+            🔍 Evaluate My Answer & Award Step Marks
+          </button>
+          <button id="showModelAnswerBtn" class="btn btn-outline">
+            📖 Show Official Model Answer
+          </button>
+        </div>
+
+        <!-- Evaluation Results Box -->
+        <div id="evalResultContainer" style="display: none;">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. PREVIOUS YEAR PAPERS (PYQ) VAULT -->
+    <section id="tab-pyqs" class="tab-pane">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">📁 Previous Years' Board Question Papers (PYQs)</h2>
+            <p class="card-subtitle">Authentic board papers with complete marking schemes, blueprints, and question breakdowns.</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <select id="pyqYearFilter" class="control-select">
+              <option value="all">All Years (2020 - 2025)</option>
+              <option value="2024">2024 Board Exam</option>
+              <option value="2023">2023 Board Exam</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid-2" id="pyqGrid">
+          <!-- Populated from PORTAL_DATA.pyqVault -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. YOUTUBE REVISION HUB -->
+    <section id="tab-videos" class="tab-pane">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">📺 High-Yield YouTube One-Shot Revision Lectures</h2>
+            <p class="card-subtitle">Curated topic-wise marathon and rapid revision classes for your exact class and stream.</p>
+          </div>
+        </div>
+
+        <div class="grid-3" id="videoGrid">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. STUDY ALARM & EXAM COUNTDOWN -->
+    <section id="tab-alarm" class="tab-pane">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">⏰ Study Alarm & Board Exam Live Ticker</h2>
+            <p class="card-subtitle">Keep disciplined study sessions with built-in audible alarms and countdown clocks.</p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <!-- Exam Countdown -->
+          <div class="stat-box cyan" style="text-align: center;">
+            <h3 style="font-size: 1.1rem; color: #fff; margin-bottom: 0.5rem;">⏳ Days Remaining for Board Exams</h3>
+            <div class="alarm-display" id="examCountdownTicker">88d 14h 22m</div>
+            <p style="color: #94a3b8; font-size: 0.9rem;">Target Board Session: Spring 2027 Examinations</p>
+          </div>
+
+          <!-- Study Alarm & Pomodoro -->
+          <div class="stat-box" style="text-align: center;">
+            <h3 style="font-size: 1.1rem; color: #fff; margin-bottom: 0.5rem;">🔔 Pomodoro Study Alarm Clock</h3>
+            <div class="alarm-display" id="timerDisplay">50:00</div>
+            <div style="display: flex; justify-content: center; gap: 0.5rem; margin-top: 1rem;">
+              <button id="startTimerBtn" class="btn btn-primary">▶️ Start 50m Session</button>
+              <button id="breakTimerBtn" class="btn btn-outline">☕ 10m Break</button>
+              <button id="stopTimerBtn" class="btn btn-outline">⏹️ Stop / Reset</button>
+              <button id="testAlarmSoundBtn" class="btn btn-outline" title="Test Alarm Buzzer">🔊 Test Alarm</button>
+            </div>
+            <p style="margin-top: 0.75rem; font-size: 0.8rem; color: #38bdf8;" id="timerStatusLabel">Timer idle. Hit start to begin focused study.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. PANIC RELIEF & MOTIVATION ZONE -->
+    <section id="tab-motivation" class="tab-pane">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">🧘 Panic Relief, Anxiety Management & Motivation Gym</h2>
+            <p class="card-subtitle">Exam anxiety is normal. Your physiology controls your psychology. Reset your nervous system in 2 minutes.</p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <!-- 4-7-8 Breathing Box -->
+          <div class="stat-box" style="text-align: center; background: rgba(15, 23, 42, 0.7);">
+            <h3 style="color: #38bdf8; margin-bottom: 0.5rem;">🌬️ Instant Calming Breath Pacer (4-7-8 Technique)</h3>
+            <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 1.5rem;">Inhale through nose (4s), Hold (7s), Exhale slowly through mouth (8s)</p>
+            
+            <div class="breathing-box">
+              <div id="breathingBubble" class="breathing-circle">Ready</div>
+            </div>
+
+            <button id="toggleBreathingBtn" class="btn btn-primary" style="margin-top: 1rem;">
+              ▶️ Begin 2-Minute Panic Reset
+            </button>
+          </div>
+
+          <!-- Mindset Advice & Daily Quotes -->
+          <div>
+            <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 1.5rem;">
+              <h4 style="color: #fbbf24; font-size: 1rem; margin-bottom: 0.5rem;">💡 What to Do When Panic Strikes During Preparation or Exam:</h4>
+              <ul style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.7; padding-left: 1.25rem;">
+                <li><strong>The 5-4-3-2-1 Grounding Rule:</strong> Look around and spot 5 things you can see, 4 you can touch, 3 you hear, 2 you smell, and 1 you taste. This immediately shuts down the amygdala fight-or-flight trigger.</li>
+                <li><strong>Sip Cold Water:</strong> Activates the mammalian dive reflex, slowing heart rate within 20 seconds.</li>
+                <li><strong>Skip and Return:</strong> In the exam hall, if question #1 or #2 looks foreign, skip to question #5 or #10. Build momentum with guaranteed marks first.</li>
+                <li><strong>Never Study New Chapters at 2 AM:</strong> Sleep deprivation increases cortisol by 40%, guaranteeing memory fog the next morning.</li>
+              </ul>
+            </div>
+
+            <!-- Daily Dynamic Motivational Quote -->
+            <div class="stat-box cyan">
+              <div class="stat-label">Daily Exam Affirmation</div>
+              <p id="dailyQuoteText" style="font-size: 1.1rem; font-style: italic; color: #fff; margin: 0.5rem 0; line-height: 1.5;">
+                "Your board exam score is a measure of your preparation for this specific test, not a measure of your worth or your future destiny."
+              </p>
+              <div class="stat-subtext" id="dailyQuoteAuthor">— Board Mentor</div>
+              <button id="nextQuoteBtn" class="btn btn-outline" style="margin-top: 0.75rem; font-size: 0.75rem;">
+                ✨ Next Quote
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. MY REPORT CARD (needs email OTP login) -->
+    <section id="tab-report" class="tab-pane">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">📄 My Report Card</h2>
+            <p class="card-subtitle">Upload your latest report card (PDF, JPG or PNG, up to 4 MB). You need to log in with an email OTP first.</p>
+          </div>
+        </div>
+
+        <div id="reportLoggedOut">
+          <p style="color: #94a3b8; margin-bottom: 1rem;">Please log in with your email to upload and view your report cards.</p>
+          <button id="reportLoginBtn" class="btn btn-primary">👤 Login with Email OTP</button>
+        </div>
+
+        <div id="reportLoggedIn" style="display: none;">
+          <div class="form-group">
+            <label class="form-label" for="reportFileInput">Choose your report card file</label>
+            <input type="file" id="reportFileInput" class="form-input" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png">
+          </div>
+          <button id="uploadReportBtn" class="btn btn-primary">⬆️ Upload Report Card</button>
+          <p id="reportMsg" style="margin-top: 0.75rem; font-size: 0.85rem; min-height: 1.2em;"></p>
+
+          <h3 style="font-size: 1.05rem; color: #fff; margin: 1.5rem 0 0.75rem;">📁 Your uploaded report cards</h3>
+          <div id="reportList" style="font-size: 0.9rem; color: #cbd5e1;"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Login Modal -->
+  <div id="authModal" class="modal-overlay">
+    <div class="modal-content">
+      <button class="modal-close" id="closeAuthModal">&times;</button>
+      <h3 style="font-size: 1.35rem; color: #fff; margin-bottom: 0.5rem;">👤 Student Login & Weekly Sync</h3>
+      <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 1.5rem;">Log in with your email-id to save your weekly progress, mock test scores, syllabus checklist, and track your All India Rank.</p>
+
+      <form id="authForm">
+        <div class="form-group">
+          <label class="form-label">Email ID</label>
+          <input type="email" id="userEmailInput" class="form-input" placeholder="student@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Your Target Board Score Goal (%)</label>
+          <input type="number" id="userGoalInput" class="form-input" placeholder="e.g. 95" min="50" max="100" value="92">
+        </div>
+
+        <button type="submit" id="sendOtpBtn" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.75rem;">
+          Send OTP to my Email
+        </button>
+      </form>
+
+      <!-- Step 2: enter the OTP that was emailed -->
+      <form id="otpForm" style="display: none;">
+        <div class="form-group">
+          <label class="form-label">Enter the 6-digit OTP sent to <strong id="otpSentTo" style="color: #fff;"></strong></label>
+          <input type="text" id="otpInput" class="form-input" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" autocomplete="one-time-code" placeholder="123456" style="letter-spacing: 0.5rem; text-align: center; font-size: 1.3rem;" required>
+        </div>
+        <button type="submit" id="verifyOtpBtn" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.75rem;">
+          Verify &amp; Login
+        </button>
+        <button type="button" id="otpBackBtn" class="btn btn-outline" style="width: 100%; justify-content: center; margin-top: 0.5rem;">
+          Use a different email
+        </button>
+      </form>
+
+      <!-- Step 3: already logged in -->
+      <div id="loggedInBox" style="display: none;">
+        <p style="color: #cbd5e1; margin-bottom: 1rem;">You are logged in as <strong id="loggedInEmail" style="color: #fff;"></strong></p>
+        <button type="button" id="logoutBtn" class="btn btn-outline" style="width: 100%; justify-content: center;">Log out</button>
+      </div>
+
+      <p id="authMessage" style="margin-top: 1rem; font-size: 0.85rem; min-height: 1.2em;"></p>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
